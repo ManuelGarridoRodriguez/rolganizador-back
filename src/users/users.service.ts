@@ -1,6 +1,3 @@
-// TODO: ¿Es necesario recoger las contraseñas en el get? Seguro que alguien podría pillarlas con el inspeccionador, quizás no sea buena idea, ya que solo las vas a necesitar para compararlas con las de la BBDD, nunca más
-// TODO: ¿Dejamos que actualicen su apodo? No, ¿no? Y tendremos que controlar que sólo haya 1 persona con su propio apodo
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -13,7 +10,7 @@ export class UsersService {
     @InjectModel('Users') private readonly usersModel: Model<Users>,
   ) {}
 
-  async createtUser(
+  async createUser(
     name: string,
     email: string,
     nick: string,
@@ -36,7 +33,6 @@ export class UsersService {
       name: user.name,
       email: user.email,
       nick: user.nick,
-      password: user.password,
     }));
   }
 
@@ -47,7 +43,6 @@ export class UsersService {
       name: user.name,
       email: user.email,
       nick: user.nick,
-      password: user.password,
     };
   }
 

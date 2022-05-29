@@ -21,7 +21,7 @@ export class UsersController {
     @Body('nick') userNick: string,
     @Body('password') userPassword: string,
   ) {
-    const generateId = await this.usersService.createtUser(
+    const generateId = await this.usersService.createUser(
       userName,
       userEmail,
       userNick,
@@ -37,8 +37,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  getUser(@Param('id') userId: string) {
-    return this.usersService.getSingleUser(userId);
+  async getUser(@Param('id') userId: string) {
+    return await this.usersService.getSingleUser(userId);
   }
 
   @Patch(':id')

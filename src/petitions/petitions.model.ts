@@ -1,12 +1,19 @@
 import * as mongoose from 'mongoose';
+import { Game, GameSchema } from 'src/game/game.model';
+import { Users } from 'src/users/users.model';
+import { UsersSchema } from '../users/users.model';
 
 export const PetitionsSchema = new mongoose.Schema({
-  game:  { type: --, required: true},
-  user: { type: --, required: true},
-  status: { type: String, required: true},
-  date: { type: Date, required: true},
+  game: { type: GameSchema, ref: 'Game', required: true },
+  user: { type: UsersSchema, ref: 'Users', required: true },
+  status: { type: String, required: true },
+  date: { type: Date, required: true },
 });
 
-export class Petitions {
-  constructor(public id: string, public game: --, public user: --, public status: string, public date: Date) {}
+export interface Petitions extends mongoose.Document {
+  id: string;
+  game: Game;
+  user: Users;
+  status: string;
+  date: Date;
 }
