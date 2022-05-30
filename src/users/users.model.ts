@@ -16,5 +16,3 @@ export interface Users extends mongoose.Document {
   password: string;
   image: string;
 }
-
-// TODO: SEGUIR CON LAS IMAGES DE USERS

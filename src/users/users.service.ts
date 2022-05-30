@@ -15,12 +15,14 @@ export class UsersService {
     email: string,
     nick: string,
     password: string,
+    image: string,
   ) {
     const newUser = new this.usersModel({
       name,
       email,
       nick,
       password,
+      image,
     });
     const result = await newUser.save();
     return result.id as string;
@@ -33,6 +35,7 @@ export class UsersService {
       name: user.name,
       email: user.email,
       nick: user.nick,
+      image: user.image,
     }));
   }
 
@@ -43,6 +46,7 @@ export class UsersService {
       name: user.name,
       email: user.email,
       nick: user.nick,
+      image: user.image,
     };
   }
 

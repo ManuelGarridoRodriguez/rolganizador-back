@@ -20,12 +20,14 @@ export class UsersController {
     @Body('email') userEmail: string,
     @Body('nick') userNick: string,
     @Body('password') userPassword: string,
+    @Body('image') userImage: string,
   ) {
     const generateId = await this.usersService.createUser(
       userName,
       userEmail,
       userNick,
       userPassword,
+      userImage,
     );
     return { id: generateId };
   }
