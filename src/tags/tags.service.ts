@@ -6,7 +6,7 @@ import { Tags } from './tags.model';
 
 @Injectable()
 export class TagsService {
-  constructor(@InjectModel('tags') private readonly tagsModel: Model<Tags>) {}
+  constructor(@InjectModel('Tags') private readonly tagsModel: Model<Tags>) {}
 
   async createTag(name: string) {
     const newTag = new this.tagsModel({
@@ -40,7 +40,7 @@ export class TagsService {
   }
 
   async deleteTag(tagId: string) {
-    const result = await this.tagsModel.deleteOne({ _id: tagId }).exec();
+    const result = await this.tagsModel.deleteOne({ id: tagId }).exec();
     if (result.deletedCount === 0) {
       throw new NotFoundException(
         'No se ha encontrado la etiqueta que deseaba borrar',

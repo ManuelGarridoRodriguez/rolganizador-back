@@ -17,7 +17,7 @@ export class TagsController {
   @Post()
   async addUser(@Body('name') tagName: string) {
     const generateId = await this.tagsService.createTag(tagName);
-    return { id: generateId };
+    return { id: generateId, name: tagName };
   }
 
   @Get()

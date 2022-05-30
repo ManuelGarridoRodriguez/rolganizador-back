@@ -5,10 +5,11 @@ import { Users } from 'src/users/users.model';
 
 import { Game } from './game.model';
 import { Comments } from '../otherSchemas/comments.model';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class GameService {
-  constructor(@InjectModel('game') private readonly gameModel: Model<Game>) {}
+  constructor(@InjectModel('Game') private readonly gameModel: Model<Game>) {}
 
   async createGame(
     comments: [Comments],
@@ -80,7 +81,7 @@ export class GameService {
   }
 
   async deleteGame(gameId: string) {
-    const result = await this.gameModel.deleteOne({ _id: gameId }).exec();
+    const result = await this.gameModel.deleteOne({ id: gameId }).exec();
     if (result.deletedCount === 0) {
       throw new NotFoundException(
         'No se ha encontrado la partida que deseaba borrar',

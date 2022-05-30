@@ -14,7 +14,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
+  @Post('')
   async addUser(
     @Body('name') userName: string,
     @Body('email') userEmail: string,
@@ -29,10 +29,17 @@ export class UsersController {
       userPassword,
       userImage,
     );
-    return { id: generateId };
+    return {
+      id: generateId,
+      name: userName,
+      email: userEmail,
+      nick: userNick,
+      password: userPassword,
+      image: userImage,
+    };
   }
 
-  @Get()
+  @Get('')
   async getAllUsers() {
     const users = await this.usersService.getUsers();
     return users;
@@ -58,7 +65,12 @@ export class UsersController {
       userNick,
       userPassword,
     );
-    return null;
+    return {
+      name: userName,
+      email: userEmail,
+      nick: userNick,
+      password: userPassword,
+    };
   }
 
   @Delete(':id')

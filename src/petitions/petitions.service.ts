@@ -9,7 +9,7 @@ import { Petitions } from './petitions.model';
 @Injectable()
 export class PetitionsService {
   constructor(
-    @InjectModel('petitions') private readonly petitionsModel: Model<Petitions>,
+    @InjectModel('Petitions') private readonly petitionsModel: Model<Petitions>,
   ) {}
 
   async createPetition(game: Game, user: Users, status: string, date: Date) {
@@ -70,7 +70,7 @@ export class PetitionsService {
 
   async deletePetition(petitionId: string) {
     const result = await this.petitionsModel
-      .deleteOne({ _id: petitionId })
+      .deleteOne({ id: petitionId })
       .exec();
     if (result.deletedCount === 0) {
       throw new NotFoundException(

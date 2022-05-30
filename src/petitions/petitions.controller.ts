@@ -29,7 +29,13 @@ export class PetitionsController {
       petitionStatus,
       petitionDate,
     );
-    return { id: generateId };
+    return {
+      id: generateId,
+      game: petitionGame,
+      user: petitionUser,
+      status: petitionStatus,
+      date: petitionDate,
+    };
   }
 
   @Get()

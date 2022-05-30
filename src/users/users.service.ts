@@ -74,7 +74,7 @@ export class UsersService {
   }
 
   async deleteUser(userId: string) {
-    const result = await this.usersModel.deleteOne({ _id: userId }).exec();
+    const result = await this.usersModel.deleteOne({ id: userId }).exec();
     if (result.deletedCount === 0) {
       throw new NotFoundException(
         'No se ha encontrado el usuario que deseaba borrar',

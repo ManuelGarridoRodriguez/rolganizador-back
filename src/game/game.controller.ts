@@ -31,7 +31,13 @@ export class GameController {
       gameCreator,
       gameName,
     );
-    return { id: generateId };
+    return {
+      id: generateId,
+      name: gameName,
+      comments: gameComments,
+      participants: gameParticipants,
+      creator: gameCreator,
+    };
   }
 
   @Get()
