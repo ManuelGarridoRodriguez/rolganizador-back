@@ -1,42 +1,31 @@
 import * as mongoose from 'mongoose';
-import { Comments, CommentsSchema } from 'src/otherSchemas/comments.model';
-import { Users, UsersSchema } from 'src/users/users.model';
+import { Comments } from 'src/otherSchemas/comments.model';
 import { Tags, TagsSchema } from '../tags/tags.model';
 
 export const GameSchema = new mongoose.Schema({
-  comments: [
-    {
-      type: CommentsSchema,
-      body: 'Comments',
-      required: true,
-    },
-  ],
+  comments: { type: Object },
   tags: [
     {
       type: TagsSchema,
       body: 'Tags',
       ref: 'Tags',
-      required: true,
     },
   ],
-  participants: [
-    { type: UsersSchema, body: 'Users', ref: 'Users', required: true },
-  ],
-  description: { type: String, required: true },
+  participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
+  description: { type: String },
   creator: {
-    type: UsersSchema,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Users',
-    required: true,
   },
-  name: { type: String, required: true },
+  name: { type: String },
 });
 
 export interface Game extends mongoose.Document {
   id: string;
-  comments: [Comments];
+  comments: Array<Comments>;
   tags: [Tags];
-  participants: [Users];
+  participants: Array<string>;
   description: string;
-  creator: Users;
+  creator: string;
   name: string;
 }

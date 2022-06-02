@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 export const TagsSchema = new mongoose.Schema({
-  name: { type: String, requires: true },
+  name: { type: String },
 });
 
 export interface Tags extends mongoose.Document {

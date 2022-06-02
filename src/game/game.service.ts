@@ -5,7 +5,8 @@ import { Users } from 'src/users/users.model';
 
 import { Game } from './game.model';
 import { Comments } from '../otherSchemas/comments.model';
-import mongoose from 'mongoose';
+import { UserDTO } from '../../dist/users/users.dto';
+import { UpdateGameDTO } from './game.dto';
 
 @Injectable()
 export class GameService {
@@ -43,41 +44,28 @@ export class GameService {
 
   async getSingleGame(gameId: string) {
     const game = await this.findGame(gameId);
-    return {
-      id: game.id,
-      comments: game.comments,
-      participants: game.participants,
-      description: game.description,
-      creator: game.creator,
-      name: game.name,
-    };
+
+    await game.populate('participants');
+
+    return game;
   }
 
-  async updateGame(
-    gameId: string,
-    comments: [Comments],
-    participants: [Users],
-    description: string,
-    creator: Users,
-    name: string,
-  ) {
+  async updateGame(gameId: string, game: UpdateGameDTO) {
     const updatedGame = await this.findGame(gameId);
-    if (comments) {
-      updatedGame.comments = comments;
+    if (game.comments) {
+      updatedGame.comments = game.comments;
     }
-    if (participants) {
-      updatedGame.participants = participants;
+    if (game.participants) {
+      updatedGame.participants = game.participants;
     }
-    if (description) {
-      updatedGame.description = description;
+    if (game.description) {
+      updatedGame.description = game.description;
     }
-    if (creator) {
-      updatedGame.creator = creator;
-    }
-    if (name) {
-      updatedGame.name = name;
+    if (game.name) {
+      updatedGame.name = game.name;
     }
     updatedGame.save();
+    return updatedGame;
   }
 
   async deleteGame(gameId: string) {

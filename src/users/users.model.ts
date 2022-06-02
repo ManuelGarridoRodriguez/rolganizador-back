@@ -1,11 +1,11 @@
 import * as mongoose from 'mongoose';
 
 export const UsersSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  nick: { type: String, required: true },
-  password: { type: String, required: true },
-  image: { type: String, required: true },
+  name: { type: String },
+  email: { type: String },
+  nick: { type: String },
+  password: { type: String },
+  image: { type: String },
 });
 
 export interface Users extends mongoose.Document {

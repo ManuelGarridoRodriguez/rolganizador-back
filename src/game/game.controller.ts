@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Comments } from 'src/otherSchemas/comments.model';
 import { Users } from 'src/users/users.model';
+import { UpdateGameDTO } from './game.dto';
 
 import { GameService } from './game.service';
 
@@ -52,23 +53,9 @@ export class GameController {
   }
 
   @Patch(':id')
-  async updateGame(
-    @Param('id') gameId: string,
-    @Body('comments') gameComments: [Comments],
-    @Body('participants') gameParticipants: [Users],
-    @Body('description') gameDescription: string,
-    @Body('creator') gameCreator: Users,
-    @Body('name') gameName: string,
-  ) {
-    await this.gameService.updateGame(
-      gameId,
-      gameComments,
-      gameParticipants,
-      gameDescription,
-      gameCreator,
-      gameName,
-    );
-    return null;
+  async updateGame(@Param('id') gameId: string, @Body() game: UpdateGameDTO) {
+    const updatedGame = await this.gameService.updateGame(gameId, game);
+    return updatedGame;
   }
 
   @Delete(':id')

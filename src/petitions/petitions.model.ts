@@ -4,10 +4,10 @@ import { Users } from 'src/users/users.model';
 import { UsersSchema } from '../users/users.model';
 
 export const PetitionsSchema = new mongoose.Schema({
-  game: { type: GameSchema, ref: 'Game', required: true },
-  user: { type: UsersSchema, ref: 'Users', required: true },
-  status: { type: String, required: true },
-  date: { type: Date, required: true },
+  game: { type: GameSchema, ref: 'Game' },
+  user: { type: UsersSchema, ref: 'Users' },
+  status: { type: String },
+  date: { type: Date },
 });
 
 export interface Petitions extends mongoose.Document {

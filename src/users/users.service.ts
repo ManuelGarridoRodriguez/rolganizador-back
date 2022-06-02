@@ -1,31 +1,57 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-
 import { Users } from './users.model';
+import { UserDTO, UserRegisterDTO } from './users.dto';
+import * as bcrypt from 'bcrypt';
 
+const saltOrRounds = 10;
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel('Users') private readonly usersModel: Model<Users>,
   ) {}
 
-  async createUser(
-    name: string,
-    email: string,
-    nick: string,
-    password: string,
-    image: string,
-  ) {
+  async createUser(user: UserRegisterDTO): Promise<UserDTO> {
+    const existUsernameAndEmail = await this.existByUsernameAndEmail(
+      user.userNick,
+      user.userEmail,
+    );
+
+    if (existUsernameAndEmail) {
+      throw new Error('Su correo o nick ya están en uso.');
+    }
+
+    const hash = await bcrypt.hash(user.userPassword, saltOrRounds);
+
     const newUser = new this.usersModel({
-      name,
-      email,
-      nick,
-      password,
-      image,
+      name: user.userName,
+      email: user.userEmail,
+      nick: user.userNick,
+      password: hash,
+      image: user.userImage,
     });
+
     const result = await newUser.save();
-    return result.id as string;
+
+    return result;
+  }
+
+  async findUserByEmail(email: string) {
+    return await this.usersModel.findOne({ email });
+  }
+
+  async comparePasswords(password: string, hash: string): Promise<boolean> {
+    return await bcrypt.compare(password, hash);
+  }
+
+  private async existByUsernameAndEmail(
+    username: string,
+    email: string,
+  ): Promise<boolean> {
+    const byUsername = await this.usersModel.findOne({ userNick: username });
+    const byEmail = await this.usersModel.findOne({ email });
+    return byUsername && byEmail ? true : false;
   }
 
   async getUsers() {
