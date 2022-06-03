@@ -7,44 +7,30 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { Comments } from 'src/otherSchemas/comments.model';
-import { Users } from 'src/users/users.model';
-import { UpdateGameDTO } from './game.dto';
+import { UpdateGameDTO, CreateGameDTO } from './game.dto';
 
 import { GameService } from './game.service';
+import { Query } from '@nestjs/common';
 
 @Controller('game')
 export class GameController {
   constructor(private readonly gameService: GameService) {}
 
   @Post()
-  async addGame(
-    @Body('comments') gameComments: [Comments],
-    @Body('participants') gameParticipants: [Users],
-    @Body('description') gameDescription: string,
-    @Body('creator') gameCreator: Users,
-    @Body('name') gameName: string,
-  ) {
-    const generateId = await this.gameService.createGame(
-      gameComments,
-      gameParticipants,
-      gameDescription,
-      gameCreator,
-      gameName,
-    );
-    return {
-      id: generateId,
-      name: gameName,
-      comments: gameComments,
-      participants: gameParticipants,
-      creator: gameCreator,
-    };
+  async addGame(@Body() createdGame: CreateGameDTO) {
+    const generatedGame = await this.gameService.createGame(createdGame);
+    return generatedGame;
   }
 
   @Get()
   async getAllGames() {
     const game = await this.gameService.getGame();
     return game;
+  }
+
+  @Get('/search')
+  async findTag(@Query('name') name: string) {
+    return await this.gameService.searchGame(name);
   }
 
   @Get(':id')

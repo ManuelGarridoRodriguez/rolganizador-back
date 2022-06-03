@@ -17,7 +17,7 @@ interface CommentsDTO {
 }
 
 export interface CreateGameDTO {
-  tags: Array<TagsDTO>;
+  tags: Array<string>;
   description: string;
   creator: string;
   name: string;

@@ -1,10 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Game } from 'src/game/game.model';
-import { Users } from 'src/users/users.model';
-
 import { Petitions } from './petitions.model';
+import { CreatePetitionDTO, UpdatePetitionDTO } from './petitions.dto.models';
 
 @Injectable()
 export class PetitionsService {
@@ -12,60 +10,35 @@ export class PetitionsService {
     @InjectModel('Petitions') private readonly petitionsModel: Model<Petitions>,
   ) {}
 
-  async createPetition(game: Game, user: Users, status: string, date: Date) {
-    const newPetition = new this.petitionsModel({
-      game,
-      user,
-      status,
-      date,
-    });
+  async createPetition(petition: CreatePetitionDTO) {
+    const newPetition = new this.petitionsModel(petition);
     const result = await newPetition.save();
-    return result.id as string;
+    await result.populate('game user');
+    return result;
   }
 
   async getPetitions() {
-    const petitions = await this.petitionsModel.find().exec();
-    return petitions.map((petition) => ({
-      id: petition.id,
-      game: petition.game,
-      user: petition.user,
-      status: petition.status,
-      date: petition.date,
-    }));
+    const petitions = await this.petitionsModel
+      .find()
+      .populate('game user')
+      .exec();
+    return petitions;
   }
 
   async getSinglePetition(petitionId: string) {
     const petition = await this.findPetition(petitionId);
-    return {
-      id: petition.id,
-      game: petition.game,
-      user: petition.user,
-      status: petition.status,
-      date: petition.date,
-    };
+    await petition.populate('game user');
+    return petition;
   }
 
-  async updatePetition(
-    petitionId: string,
-    game: Game,
-    user: Users,
-    status: string,
-    date: Date,
-  ) {
+  async updatePetition(petition: UpdatePetitionDTO, petitionId: string) {
     const updatedPetition = await this.findPetition(petitionId);
-    if (game) {
-      updatedPetition.game = game;
+    if (petition.status) {
+      updatedPetition.status = petition.status;
     }
-    if (user) {
-      updatedPetition.user = user;
-    }
-    if (status) {
-      updatedPetition.status = status;
-    }
-    if (date) {
-      updatedPetition.date = date;
-    }
-    updatedPetition.save();
+    const saved = await updatedPetition.save();
+    await saved.populate('game user');
+    return saved;
   }
 
   async deletePetition(petitionId: string) {
@@ -89,6 +62,7 @@ export class PetitionsService {
     if (!petition) {
       throw new NotFoundException('No se ha encontrado la petición');
     }
+    await petition.populate('game user');
     return petition;
   }
 }

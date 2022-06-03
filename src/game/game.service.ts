@@ -1,51 +1,40 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Users } from 'src/users/users.model';
-
 import { Game } from './game.model';
-import { Comments } from '../otherSchemas/comments.model';
-import { UserDTO } from '../../dist/users/users.dto';
-import { UpdateGameDTO } from './game.dto';
+import { UpdateGameDTO, CreateGameDTO } from './game.dto';
 
 @Injectable()
 export class GameService {
   constructor(@InjectModel('Game') private readonly gameModel: Model<Game>) {}
 
-  async createGame(
-    comments: [Comments],
-    participants: [Users],
-    description: string,
-    creator: Users,
-    name: string,
-  ) {
+  async createGame(game: CreateGameDTO) {
     const newGame = new this.gameModel({
-      comments,
-      participants,
-      description,
-      creator,
-      name,
-    });
-    const result = await newGame.save();
-    return result.id as string;
-  }
-
-  async getGame() {
-    const game = await this.gameModel.find().exec();
-    return game.map((game) => ({
-      id: game.id,
-      comments: game.comments,
-      participants: game.participants,
+      comments: [],
+      participants: [],
       description: game.description,
       creator: game.creator,
       name: game.name,
-    }));
+      tags: game.tags,
+    });
+    const result = await newGame.save();
+    await result.populate('creator tags');
+    return result;
+  }
+
+  async getGame() {
+    const games: Array<Game> = await this.gameModel
+      .find()
+      .populate('participants creator tags')
+      .exec();
+
+    return games;
   }
 
   async getSingleGame(gameId: string) {
     const game = await this.findGame(gameId);
 
-    await game.populate('participants');
+    await game.populate('participants tags creator');
 
     return game;
   }
@@ -65,6 +54,9 @@ export class GameService {
       updatedGame.name = game.name;
     }
     updatedGame.save();
+
+    await updatedGame.populate('participants creator tags');
+
     return updatedGame;
   }
 
@@ -87,6 +79,14 @@ export class GameService {
     if (!game) {
       throw new NotFoundException('No se ha encontrado la partida');
     }
+    await game.populate('participants creator tags');
     return game;
+  }
+
+  async searchGame(search: string) {
+    const games = this.gameModel.find({
+      name: { $regex: search, $options: 'i' },
+    });
+    return games;
   }
 }
