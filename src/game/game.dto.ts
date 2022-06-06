@@ -8,6 +8,7 @@ export interface GameDTO {
   description: string;
   creator: UserDTO;
   name: string;
+  image: string;
 }
 
 interface CommentsDTO {
@@ -21,6 +22,7 @@ export interface CreateGameDTO {
   description: string;
   creator: string;
   name: string;
+  image: string;
 }
 
 export interface UpdateGameDTO {
@@ -29,4 +31,5 @@ export interface UpdateGameDTO {
   participants: Array<string>;
   description: string;
   name: string;
+  image: string;
 }

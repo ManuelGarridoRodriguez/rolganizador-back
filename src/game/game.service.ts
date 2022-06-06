@@ -16,6 +16,7 @@ export class GameService {
       creator: game.creator,
       name: game.name,
       tags: game.tags,
+      image: game.image,
     });
     const result = await newGame.save();
     await result.populate('creator tags');
