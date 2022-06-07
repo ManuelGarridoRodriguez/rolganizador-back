@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Game } from './game.model';
-import { UpdateGameDTO, CreateGameDTO } from './game.dto';
+import { CreateGameDTO } from './game.dto';
 
 @Injectable()
 export class GameService {
@@ -16,6 +16,7 @@ export class GameService {
       creator: game.creator,
       name: game.name,
       tags: game.tags,
+      image: game.image,
     });
     const result = await newGame.save();
     await result.populate('creator tags');
@@ -31,6 +32,10 @@ export class GameService {
     return games;
   }
 
+  async findGamesByKey(key, id) {
+    return await this.gameModel.find({ [key]: id });
+  }
+
   async getSingleGame(gameId: string) {
     const game = await this.findGame(gameId);
 
@@ -39,7 +44,7 @@ export class GameService {
     return game;
   }
 
-  async updateGame(gameId: string, game: UpdateGameDTO) {
+  async updateGame(gameId, game) {
     const updatedGame = await this.findGame(gameId);
     if (game.comments) {
       updatedGame.comments = game.comments;
@@ -61,7 +66,7 @@ export class GameService {
   }
 
   async deleteGame(gameId: string) {
-    const result = await this.gameModel.deleteOne({ id: gameId }).exec();
+    const result = await this.gameModel.deleteOne({ _id: gameId }).exec();
     if (result.deletedCount === 0) {
       throw new NotFoundException(
         'No se ha encontrado la partida que deseaba borrar',

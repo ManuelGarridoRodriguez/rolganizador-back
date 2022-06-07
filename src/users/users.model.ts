@@ -6,6 +6,7 @@ export const UsersSchema = new mongoose.Schema({
   nick: { type: String },
   password: { type: String },
   image: { type: String },
+  createdDate: { type: Date },
 });
 
 export interface Users extends mongoose.Document {
@@ -15,4 +16,5 @@ export interface Users extends mongoose.Document {
   nick: string;
   password: string;
   image: string;
+  createdDate: Date;
 }

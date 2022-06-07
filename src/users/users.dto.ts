@@ -4,6 +4,7 @@ export interface UserRegisterDTO {
   userNick: string;
   userPassword: string;
   userImage: string;
+  createdDate: Date;
 }
 
 export interface UserDTO {
@@ -13,6 +14,7 @@ export interface UserDTO {
   nick: string;
   password: string;
   image: string;
+  createdDate: Date;
 }
 
 export interface UserLoginDTO {

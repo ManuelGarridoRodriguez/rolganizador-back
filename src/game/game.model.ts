@@ -16,6 +16,7 @@ export const GameSchema = new mongoose.Schema({
     ref: 'Users',
   },
   name: { type: String },
+  image: { type: String },
 });
 
 export interface Game extends mongoose.Document {
@@ -26,4 +27,5 @@ export interface Game extends mongoose.Document {
   description: string;
   creator: string;
   name: string;
+  image: string;
 }
