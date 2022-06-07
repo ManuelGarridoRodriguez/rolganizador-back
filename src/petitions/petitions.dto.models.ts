@@ -1,6 +1,7 @@
 export interface CreatePetitionDTO {
   game: string;
-  user: string;
+  sender: string;
+  receptor: string;
   status: string;
 }
 
@@ -10,7 +11,8 @@ export interface UpdatePetitionDTO {
 
 export interface PetitionDTO {
   game: string;
-  user: string;
+  sender: string;
+  receptor: string;
   status: string;
   date: string;
 }

@@ -57,24 +57,17 @@ export class UsersController {
   @Patch(':id')
   async updateUser(
     @Param('id') userId: string,
-    @Body('name') userName: string,
-    @Body('email') userEmail: string,
     @Body('nick') userNick: string,
     @Body('password') userPassword: string,
+    @Body('image') userImage: string,
   ) {
-    await this.usersService.updateUser(
+    const updatedUser = await this.usersService.updateUser(
       userId,
-      userName,
-      userEmail,
       userNick,
       userPassword,
+      userImage,
     );
-    return {
-      name: userName,
-      email: userEmail,
-      nick: userNick,
-      password: userPassword,
-    };
+    return updatedUser;
   }
 
   @Delete(':id')

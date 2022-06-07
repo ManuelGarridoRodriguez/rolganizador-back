@@ -28,9 +28,10 @@ export class PetitionsController {
     return petitions;
   }
 
-  @Get(':id')
-  async getPetition(@Param('id') petitionId: string) {
-    return await this.petitionsService.getSinglePetition(petitionId);
+  @Get('/user/:id')
+  async getPetitionsByUser(@Param('id') userId: string) {
+    const petitions = await this.petitionsService.getPetitionsByUser(userId);
+    return petitions;
   }
 
   @Patch(':id')

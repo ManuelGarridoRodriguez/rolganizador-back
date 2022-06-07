@@ -13,22 +13,30 @@ export class PetitionsService {
   async createPetition(petition: CreatePetitionDTO) {
     const newPetition = new this.petitionsModel(petition);
     const result = await newPetition.save();
-    await result.populate('game user');
+    await result.populate('game sender receptor');
     return result;
   }
 
   async getPetitions() {
     const petitions = await this.petitionsModel
       .find()
-      .populate('game user')
+      .populate('game sender receptor')
       .exec();
     return petitions;
   }
 
   async getSinglePetition(petitionId: string) {
     const petition = await this.findPetition(petitionId);
-    await petition.populate('game user');
+    await petition.populate('game sender receptor');
     return petition;
+  }
+
+  async getPetitionsByUser(userId: string) {
+    const petitions = await this.petitionsModel
+      .find({ $or: [{ sender: userId }, { receptor: userId }] })
+      .populate('game sender receptor')
+      .exec();
+    return petitions;
   }
 
   async updatePetition(petition: UpdatePetitionDTO, petitionId: string) {
@@ -37,7 +45,7 @@ export class PetitionsService {
       updatedPetition.status = petition.status;
     }
     const saved = await updatedPetition.save();
-    await saved.populate('game user');
+    await saved.populate('game sender receptor');
     return saved;
   }
 
@@ -62,7 +70,7 @@ export class PetitionsService {
     if (!petition) {
       throw new NotFoundException('No se ha encontrado la petición');
     }
-    await petition.populate('game user');
+    await petition.populate('game sender receptor');
     return petition;
   }
 }
