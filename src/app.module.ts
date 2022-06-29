@@ -12,7 +12,7 @@ import { PetitionsModule } from './petitions/petitions.module';
     GameModule,
     PetitionsModule,
     MongooseModule.forRoot(
-      'mongodb+srv://Cecrom:_R0ck!Rul3S_@cluster0.v69o7.mongodb.net/rolganizador?retryWrites=true&w=majority',
+      'mongodb+srv://Cecrom:*password*@cluster0.v69o7.mongodb.net/rolganizador?retryWrites=true&w=majority',
     ),
   ],
   controllers: [],
